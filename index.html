@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chameleon Overlord</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="hud">
+            <div class="player-stats">
+                <div class="health-bar">
+                    <div class="health-fill"></div>
+                </div>
+                <div class="score">Score: <span id="score">0</span></div>
+            </div>
+            <div class="boss-stats">
+                <div class="boss-health-bar">
+                    <div class="boss-health-fill"></div>
+                </div>
+                <div class="boss-phase">Phase: <span id="phase">1</span></div>
+            </div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <div class="game-menu" id="gameMenu">
+            <h1>Chameleon Overlord</h1>
+            <button id="startGame">Start Battle</button>
+            <button id="resetBoss">Reset Boss AI</button>
+            <div class="controls-info">
+                <h2>Controls</h2>
+                <p>WASD / Arrow Keys - Move</p>
+                <p>Space - Jump</p>
+                <p>Left Click - Attack</p>
+                <p>Right Click - Special Move</p>
+                <p>E - Interact</p>
+            </div>
+        </div>
+    </div>
+    <script src="player.js"></script>
+    <script src="boss.js"></script>
+    <script src="game.js"></script>
+</body>
+</html> 
