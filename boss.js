@@ -98,6 +98,27 @@ class Boss {
                 execute: () => this.counterAttack(),
                 counter: null,
                 energyCost: 15
+            },
+            {
+                name: 'energyNova',
+                weight: 0.6,
+                execute: () => this.energyNovaAttack(),
+                counter: null,
+                energyCost: 20
+            },
+            {
+                name: 'laserGrid',
+                weight: 0.5,
+                execute: () => this.laserGridAttack(),
+                counter: null,
+                energyCost: 25
+            },
+            {
+                name: 'energyStorm',
+                weight: 0.4,
+                execute: () => this.energyStormAttack(),
+                counter: null,
+                energyCost: 30
             }
         ];
     }
@@ -575,6 +596,64 @@ class Boss {
         }
     }
     
+    energyNovaAttack() {
+        if (this.attackCooldown <= 0) {
+            // Create energy nova
+            const numProjectiles = this.rageMode ? 12 : 8;
+            for (let i = 0; i < numProjectiles; i++) {
+                const angle = (Math.PI * 2 / numProjectiles) * i;
+                this.projectiles.push(new Projectile(
+                    this.x + this.width / 2,
+                    this.y + this.height / 2,
+                    Math.cos(angle) * (this.rageMode ? 7 : 5),
+                    Math.sin(angle) * (this.rageMode ? 7 : 5),
+                    '#ff00ff',
+                    10
+                ));
+            }
+            this.attackCooldown = this.rageMode ? 30 : 45;
+        }
+    }
+
+    laserGridAttack() {
+        if (this.attackCooldown <= 0) {
+            // Create laser grid
+            const numLasers = this.rageMode ? 6 : 4;
+            for (let i = 0; i < numLasers; i++) {
+                const x = (this.game.canvas.width / numLasers) * i;
+                this.projectiles.push(new Projectile(
+                    x,
+                    0,
+                    0,
+                    this.game.canvas.height,
+                    '#ff00ff',
+                    20,
+                    'laser'
+                ));
+            }
+            this.attackCooldown = this.rageMode ? 60 : 90;
+        }
+    }
+
+    energyStormAttack() {
+        if (this.attackCooldown <= 0) {
+            // Create energy storm
+            const numProjectiles = this.rageMode ? 20 : 10;
+            for (let i = 0; i < numProjectiles; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                this.projectiles.push(new Projectile(
+                    this.x + this.width / 2,
+                    this.y + this.height / 2,
+                    Math.cos(angle) * (this.rageMode ? 7 : 5),
+                    Math.sin(angle) * (this.rageMode ? 7 : 5),
+                    '#ff00ff',
+                    10
+                ));
+            }
+            this.attackCooldown = this.rageMode ? 45 : 60;
+        }
+    }
+
     activateRageMode() {
         this.rageMode = true;
         this.rageTimer = this.rageDuration;
@@ -640,4 +719,4 @@ class Shield {
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
     }
-} 
+}

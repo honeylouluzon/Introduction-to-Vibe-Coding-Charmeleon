@@ -161,4 +161,4 @@ class Game {
 // Initialize game when window loads
 window.addEventListener('load', () => {
     new Game();
-}); 
+});
