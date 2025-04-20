@@ -77,6 +77,36 @@ class Player {
             this.touchStartX = touchEndX;
             this.touchStartY = touchEndY;
         });
+
+        // Add touch controls for combat
+        window.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                this.attack();
+            } else if (e.touches.length === 2) {
+                this.specialAttack();
+            }
+        });
+
+        window.addEventListener('touchend', (e) => {
+            if (e.touches.length === 0) {
+                this.isAttacking = false;
+            }
+        });
+
+        // Add mouse controls for combat
+        window.addEventListener('mousedown', (e) => {
+            if (e.button === 0) {
+                this.attack();
+            } else if (e.button === 2) {
+                this.specialAttack();
+            }
+        });
+
+        window.addEventListener('mouseup', (e) => {
+            if (e.button === 0) {
+                this.isAttacking = false;
+            }
+        });
     }
 
     update() {
