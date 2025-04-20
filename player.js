@@ -44,6 +44,39 @@ class Player {
         this.invincible = false;
         this.invincibleTimer = 0;
         this.invincibleDuration = 30; // frames
+
+        // Add touch controls for movement
+        window.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.touches[0].clientX;
+            this.touchStartY = e.touches[0].clientY;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            const touchEndX = e.touches[0].clientX;
+            const touchEndY = e.touches[0].clientY;
+
+            const deltaX = touchEndX - this.touchStartX;
+            const deltaY = touchEndY - this.touchStartY;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                // Horizontal swipe
+                if (deltaX > 0) {
+                    this.x += this.speed; // Swipe right
+                } else {
+                    this.x -= this.speed; // Swipe left
+                }
+            } else {
+                // Vertical swipe
+                if (deltaY < 0 && !this.isJumping) {
+                    this.velocityY = this.jumpForce; // Swipe up to jump
+                    this.isJumping = true;
+                }
+            }
+
+            // Update touch start position for continuous movement
+            this.touchStartX = touchEndX;
+            this.touchStartY = touchEndY;
+        });
     }
 
     update() {
