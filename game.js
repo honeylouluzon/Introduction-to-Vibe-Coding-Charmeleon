@@ -14,6 +14,7 @@ class Game {
         // Initialize game objects
         this.player = new Player(this);
         this.boss = new Boss(this);
+        this.guardian = new Guardian(this.player);
         
         // Event listeners
         window.addEventListener('keydown', (e) => this.handleKeyDown(e));
@@ -120,6 +121,7 @@ class Game {
         // Update game objects
         this.player.update();
         this.boss.update();
+        this.guardian.update();
         this.projectiles.forEach(projectile => projectile.update());
 
         // Check collisions
@@ -128,6 +130,7 @@ class Game {
         // Draw game objects
         this.player.draw(this.ctx);
         this.boss.draw(this.ctx);
+        this.guardian.draw(this.ctx);
         this.projectiles.forEach(projectile => projectile.draw(this.ctx));
 
         // Check game over conditions
@@ -155,6 +158,70 @@ class Game {
         this.isRunning = false;
         alert('Victory! You defeated the Chameleon Overlord! Score: ' + this.score);
         this.showMenu();
+    }
+}
+
+// Added Guardian NPC logic
+class Guardian {
+    constructor(player) {
+        this.player = player;
+        this.width = 40;
+        this.height = 40;
+        this.x = player.x - 60; // Fixed distance from player
+        this.y = player.y;
+        this.health = 100;
+        this.maxHealth = 100;
+        this.shieldCooldown = 0;
+        this.shieldDuration = 0;
+        this.isShieldActive = false;
+    }
+
+    update() {
+        // Follow the player
+        this.x = this.player.x - 60;
+        this.y = this.player.y;
+
+        // Shield cooldown logic
+        if (this.shieldCooldown > 0) {
+            this.shieldCooldown--;
+        }
+
+        // Shield duration logic
+        if (this.isShieldActive) {
+            this.shieldDuration--;
+            if (this.shieldDuration <= 0) {
+                this.isShieldActive = false;
+            }
+        }
+    }
+
+    activateShield() {
+        if (this.shieldCooldown <= 0) {
+            this.isShieldActive = true;
+            this.shieldDuration = 300; // 5 seconds at 60fps
+            this.shieldCooldown = 1800; // 30 seconds cooldown
+        }
+    }
+
+    draw(ctx) {
+        // Draw Guardian
+        ctx.fillStyle = '#0000ff';
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+
+        // Draw shield effect
+        if (this.isShieldActive) {
+            ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.arc(this.x + this.width / 2, this.y + this.height / 2, this.width, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        // Draw health bar
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(this.x, this.y - 10, this.width, 5);
+        ctx.fillStyle = '#00ff00';
+        ctx.fillRect(this.x, this.y - 10, (this.health / this.maxHealth) * this.width, 5);
     }
 }
 
